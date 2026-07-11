@@ -1,5 +1,6 @@
 package br.com.projeto.cadastro.persistance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class Cadastro {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @JsonIgnore
     @Column(name = "senha", nullable = false)
     private String senha;
 
