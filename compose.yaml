@@ -1,0 +1,51 @@
+services:
+  # Configuração do PostgreSQL
+  postgres:
+    # Imagem baixada
+    image: 'postgres:15'
+    # Nome do Container
+    container_name: postgres_crud
+    # Ambiente
+    environment:
+      # Nome do Banco
+      POSTGRES_DB: b_usuario
+      # Usuario de acesso
+      POSTGRES_USER: user
+      # Senha de acesso
+      POSTGRES_PASSWORD: user
+    # Porta de acesso Interno e Externo
+    ports:
+      - '5433:5432'
+    # Volume onde seram guardados os dados
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Restart do ambiente - Sempre
+    restart: always
+
+  # Configuração da Aplicação
+  spring_app:
+    # Caminho da Build
+    build: .
+    # Nome do Container
+    container_name: cadastro_usuario
+    # Porta de acesso Interno e Externo
+    ports:
+      - "8081:8080"
+    # Ambiente
+    environment:
+      # Caminho do banco
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/b_usuario
+      # Usuario de acesso
+      SPRING_DATASOURCE_USERNAME: user
+      # Senha de acesso
+      SPRING_DATASOURCE_PASSWORD: user
+    # Configuração de dependencia para inicializar
+    depends_on:
+      - postgres
+    # Restart do ambiente - SEMPRE
+    restart: always
+
+# Diretorio onde será armazenado o volume do Banco e Aplicação
+volumes:
+  postgres_data:
+
