@@ -71,6 +71,11 @@ public class CadastroServiceImpl implements CadastroService {
     @Override
     public void setApagarCadastro(Long id) {
 
+        Cadastro existe = cadastroRepository.findById(id)
+                                            .orElseThrow(() -> new RuntimeException("ID não encontrado"));
+
+        cadastroRepository.delete(existe);
+
     }
 
     @Override
