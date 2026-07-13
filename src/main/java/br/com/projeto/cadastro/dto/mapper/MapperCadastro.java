@@ -20,19 +20,33 @@ public class MapperCadastro {
 
     public static Cadastro toEntity(CadastroRequest dto) {
         return Cadastro.builder()
-                       .nome(dto.getNome())
-                       .email(dto.getEmail())
-                       .senha(dto.getSenha())
+                       .nome(dto.getNome()
+                                .trim()
+                                .toUpperCase()
+                                .replaceAll("\\s+", " "))
+                       .email(dto.getEmail()
+                                 .trim()
+                                 .replaceAll("\\s+", ""))
+                       .senha(dto.getSenha()
+                                 .trim()
+                                 .replaceAll("\\s+", ""))
                        .build();
     }
 
-    public static void toUpdate(Cadastro cadastro, CadastroUpdate dto){
-        if(dto.getNome() != null && !dto.getNome().equals(cadastro.getNome())){
-            cadastro.setNome(dto.getNome());
+    public static void toUpdate(Cadastro cadastro, CadastroUpdate dto) {
+        if( dto.getNome() != null && !dto.getNome()
+                                         .equals(cadastro.getNome()) ) {
+            cadastro.setNome(dto.getNome()
+                                .trim()
+                                .toUpperCase()
+                                .replaceAll("\\s+", " "));
         }
 
-        if(dto.getEmail() != null && !dto.getEmail().equals(cadastro.getEmail())){
-            cadastro.setEmail(dto.getEmail());
+        if( dto.getEmail() != null && !dto.getEmail()
+                                          .equals(cadastro.getEmail()) ) {
+            cadastro.setEmail(dto.getEmail()
+                                 .trim()
+                                 .replaceAll("\\s+", ""));
         }
 
 
