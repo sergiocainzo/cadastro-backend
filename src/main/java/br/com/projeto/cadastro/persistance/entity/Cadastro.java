@@ -15,6 +15,7 @@ import java.time.ZoneId;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "tb_cadastro")
 public class Cadastro {
 
     @Id
@@ -41,7 +42,7 @@ public class Cadastro {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    @PostPersist
+    @PrePersist
     public void onSave() {
         dataCadastro = LocalDateTime.now(ZoneId.of("America/Recife"));
     }
