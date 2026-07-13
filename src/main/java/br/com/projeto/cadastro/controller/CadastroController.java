@@ -46,4 +46,10 @@ public class CadastroController {
         return ResponseEntity.ok(atualizado);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> apagarCadastroDeUsuario(@PathVariable Long id){
+        cadastroService.setApagarCadastro(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
