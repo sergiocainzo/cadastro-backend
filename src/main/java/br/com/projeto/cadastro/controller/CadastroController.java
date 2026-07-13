@@ -4,6 +4,7 @@ import br.com.projeto.cadastro.dto.request.CadastroRequest;
 import br.com.projeto.cadastro.dto.response.CadastroResponse;
 import br.com.projeto.cadastro.dto.update.CadastroUpdate;
 import br.com.projeto.cadastro.service.CadastroService;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class CadastroController {
     }
 
     @PostMapping
-    public ResponseEntity<CadastroResponse> cadastrarNovoUsuario(@RequestBody CadastroRequest dto) {
+    public ResponseEntity<CadastroResponse> cadastrarNovoUsuario(@Valid @RequestBody CadastroRequest dto) {
         CadastroResponse novo = cadastroService.setNovoCadastro(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(novo);
