@@ -12,6 +12,7 @@ public class MapperCadastro {
                                .id(cadastro.getId())
                                .nome(cadastro.getNome())
                                .email(cadastro.getEmail())
+                               .senha(cadastro.getSenha())
                                .ativo(cadastro.getAtivo())
                                .dataCadastro(cadastro.getDataCadastro())
                                .dataAtualizacao(cadastro.getDataAtualizacao())
