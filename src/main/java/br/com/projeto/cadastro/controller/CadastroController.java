@@ -5,7 +5,6 @@ import br.com.projeto.cadastro.dto.response.CadastroResponse;
 import br.com.projeto.cadastro.dto.update.CadastroUpdate;
 import br.com.projeto.cadastro.service.CadastroService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cadastros")
+@CrossOrigin(origins = "*")
 public class CadastroController {
 
     private final CadastroService cadastroService;
@@ -50,6 +50,12 @@ public class CadastroController {
     public ResponseEntity<Void> apagarCadastroDeUsuario(@PathVariable Long id){
         cadastroService.setApagarCadastro(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/alterarstatus")
+    public ResponseEntity<CadastroResponse> alterarStatusAtivo(@PathVariable Long id){
+        CadastroResponse atualizado = cadastroService.setMudarStatusAtivo(id);
+        return ResponseEntity.ok(atualizado);
     }
 
 }
