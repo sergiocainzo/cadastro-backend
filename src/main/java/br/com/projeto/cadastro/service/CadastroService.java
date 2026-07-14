@@ -17,7 +17,7 @@ public interface CadastroService {
 
     void setApagarCadastro(Long id);
 
-    void setMudarStatusAtivo(Long id);
+    CadastroResponse setMudarStatusAtivo(Long id);
 
     void setAlterarSenha(Long id, String senha);
 

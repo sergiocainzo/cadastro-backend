@@ -7,6 +7,7 @@ import br.com.projeto.cadastro.dto.update.CadastroUpdate;
 import br.com.projeto.cadastro.persistance.entity.Cadastro;
 import br.com.projeto.cadastro.persistance.repository.CadastroRepository;
 import br.com.projeto.cadastro.service.CadastroService;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,11 +76,17 @@ public class CadastroServiceImpl implements CadastroService {
                                             .orElseThrow(() -> new RuntimeException("ID não encontrado"));
 
         cadastroRepository.delete(existe);
-
     }
 
     @Override
-    public void setMudarStatusAtivo(Long id) {
+    public CadastroResponse setMudarStatusAtivo(Long id) {
+        Cadastro existe = cadastroRepository.findById(id).orElseThrow(() -> new RuntimeException("ID não encontrado"));
+
+        existe.setAtivo(!existe.getAtivo());
+
+        Cadastro atualizado = cadastroRepository.save(existe);
+
+        return MapperCadastro.toResponse(atualizado);
 
     }
 
