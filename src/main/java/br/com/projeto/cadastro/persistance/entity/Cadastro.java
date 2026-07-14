@@ -29,7 +29,6 @@ public class Cadastro {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @JsonIgnore
     @Column(name = "senha", nullable = false)
     private String senha;
 
