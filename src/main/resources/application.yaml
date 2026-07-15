@@ -1,21 +1,25 @@
-spring:
-  application:
-    name: cadastro
-  # Configuração do DataSource ( Banco )
-  datasource:
-    url: jdbc:postgresql://postgres:5432/b_usuario
-    username: user
-    password: user
+spring:                     # Configurações principais do Spring Boot
+  application:              # Informações da aplicação
+    name: cadastro          # Nome da aplicação (aparece em logs e métricas)
 
-  # Configuração do Hibernate
-  jpa:
+  datasource:               # Configuração do DataSource (Banco)
+    url: jdbc:postgresql://postgres:5432/b_usuario # URL de conexão com o banco (host:porta/banco)
+    username: user          # Usuário do banco
+    password: user          # Senha do banco
+
+  jpa:                      # Configuração do Hibernate/JPA
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update      # Atualiza automaticamente o schema do banco (bom para dev, perigoso em produção)
+    show-sql: false         # Define se as quereis SQL devem ser exibidas no console (false = mais leve)
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect # Dialeto específico do Postgres
 
-  # Configuração do Perfil
-  profiles:
-    active: dev
+  main:                     # Configuração de inicialização
+    lazy-initialization: true # Carrega Benas sob demanda, economiza memória
+
+logging:                    # Configuração de Logs
+  level:
+    root: INFO              # Nível padrão de log (INFO = equilibrado)
+    org.hibernate.SQL: WARN  # Reduz verbosidade dos logs de SQL
+    org.springframework: WARN # Reduz verbosidade dos logs internos do Spring

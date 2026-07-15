@@ -1,51 +1,48 @@
-services:
-  # Configuração do PostgreSQL
-  postgres:
-    # Imagem baixada
-    image: 'postgres:15'
-    # Nome do Container
-    container_name: postgres_crud
-    # Ambiente
-    environment:
-      # Nome do Banco
-      POSTGRES_DB: b_usuario
-      # Usuario de acesso
-      POSTGRES_USER: user
-      # Senha de acesso
-      POSTGRES_PASSWORD: user
-    # Porta de acesso Interno e Externo
+services:                         # Lista de serviços (containers) que serão criados
+
+  postgres:                       # Configuração do PostgreSQL(Banco de dados)
+    image: 'postgres:15-alpine'   # Imagem oficial do Postgres, versão 15, variante leve "alpine"
+    container_name: postgres_crud # Nome fixo do container para facilitar identificação
+    environment:                  # Variáveis de ambiente usadas pelo Postgres
+      POSTGRES_DB: b_usuario      # Nome do banco que será criado automaticamente
+      POSTGRES_USER: user         # Usuário padrão do banco
+      POSTGRES_PASSWORD: user     # Senha do usuário
     ports:
-      - '5433:5432'
-    # Volume onde seram guardados os dados
+      - '5433:5432'               # Mapeia porta externa 5433 e interna 5432 (Postgres)
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    # Restart do ambiente - Sempre
-    restart: always
+      - postgres_data:/var/lib/postgresql/data # Volume persistente para dados do banco
+    restart: always               # Reinicia o container automaticamente se cair
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U user -d b_usuario"] # Comando de verificação
+      interval: 10s               # Frequência do teste
+      timeout: 5s                 # Tempo máximo de espera por resposta
+      retries: 5                  # Quantas falhas até marcar como "unhealthy"
+    deploy:                       # Configuração de recursos
+      resources:
+        limits:
+          memory: 1G              # Limite máximo de memória RAM para o container
+          cpus: "0.50"            # Limite de CPU (meio núcleo)
 
-  # Configuração da Aplicação
-  spring_app:
-    # Caminho da Build
-    build: .
-    # Nome do Container
-    container_name: cadastro_usuario
-    # Porta de acesso Interno e Externo
+  spring_app:                     # Serviço da aplicação Spring Boot
+    build: .                      # Usa o Dockerfile no diretorio atual para construir a imagem
+    container_name: cadastro_usuario  # Nome fixo do container da aplicação
     ports:
-      - "8081:8080"
-    # Ambiente
-    environment:
-      # Caminho do banco
+      - "8081:8080"               # Mapeia porta externa 8081 para interna 8080 (Spring Boot)
+    environment:                  # Variáveis de ambiente para configurar a aplicação
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/b_usuario
-      # Usuario de acesso
       SPRING_DATASOURCE_USERNAME: user
-      # Senha de acesso
       SPRING_DATASOURCE_PASSWORD: user
-    # Configuração de dependencia para inicializar
-    depends_on:
-      - postgres
-    # Restart do ambiente - SEMPRE
-    restart: always
+      SPRING_PROFILES_ACTIVE: dev # Define perfil ativo como "dev"
+    depends_on:                   # Define dependência: só sobe depois do Postgres estar saudável
+      postgres:
+        condition: service_healthy
+    restart: always               # Reiniciar automaticamente se cair
+    deploy:
+      resources:
+        limits:
+          memory: 512M            # Limite de memoria para a aplicação
+          cpus: "0.50"            # Limite de CPU ( meio núcleo)
 
-# Diretorio onde será armazenado o volume do Banco e Aplicação
-volumes:
-  postgres_data:
+volumes:                          # Declaração de volumes persistentes
+  postgres_data:                  # Volume usado pelo banco para guardar dados
 
